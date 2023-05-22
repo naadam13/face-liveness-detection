@@ -38,7 +38,7 @@ def livenessapp(model_path, le_path, detector_folder, confidence=0.5):
     # initialize the video stream and allow camera to warmup
     print('[INFO] starting video stream...')
     # Replace the below URL with your own. Make sure to add "/shot.jpg" at last.
-    url = "https://192.168.174.245:8080/shot.jpg"
+    url = "http://10.32.1.188:8080/shot.jpg"
     # vs = VideoStream(src=0).start()
     # time.sleep(2) # wait camera to warmup
 
