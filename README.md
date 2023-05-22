@@ -29,7 +29,7 @@ Check out requirements.txt for the correct version of packages.
   * `--detector (or -d)` Path to OpenCV\'s deep learning face detector  
   * `--confidence (or -c)` Confidence of face detector model (default is 0.5 | 50%)  
   **Example**: example for *fake image* dataset -> `python face_from_image.py -i images/fakes/2.jpg -o dataset/fake -d face_detector -c 0.5` | example for *real image* dataset -> `python face_from_image.py -i images/reals/1.jpg -o dataset/real -d face_detector -c 0.5`
-* **`livenessnet.py`**: Model architecture for our liveness detection model and build function to build the neural network (there is no command line arguement for this file (no need to do that)). The class *LivenessNet* will be called from the `train_model.py` file or `train_model_v2.py` file in order to build a model and run the training process from `train_model.py` file or `train_model_v2.py` file.
+* **`livenessnet.py`**: Model architecture for our liveness detection model and build function to build the neural network (there is no command line arguement for this file (no need to do that)). The class *LivenessNet* will be called from the `train_model.py` file in order to build a model and run the training process.
 * **`train_model.py`**: The code used to train the liveness detection model and output .model, label_encoder.pickle, and plot.png image files.  
   Command line argument:
   * `--dataset (or -d)` Path to input Dataset
@@ -45,6 +45,7 @@ Check out requirements.txt for the correct version of packages.
   * `--detector (or -d)` Path to OpenCV\'s deep learning face detector  
   * `--confidence (or -c)` Confidence of face detector model (default is 0.5 | 50%)  
   **Example**: `python liveness_app.py -m liveness.model -l label_encoder_model.pickle -d face_detector -c 0.5` or `python liveness_app.py -m liveness.h5 -l label_encoder.pickle -d face_detector -c 0.5`
+**`liveness_app_v2.py`**: Run face detection, draw bounding box, and run liveness detection model real-time on webcam without command line argument
 * **`dataset`** folder: Example folder and images for training liveness detection model. (These images are outputs of `collect_dataset.py`)
 * **`face_detector`** folder: The folder containing the caffe model files including .prototxt and .caffemodel to use with OpenCV and do face detection
 * **`images`** folder: Example folder and images for inputting to `face_from_image.py`
@@ -54,39 +55,24 @@ Check out requirements.txt for the correct version of packages.
 1. Download/Clone this repo
 2. Install the packages in `requirements.txt`
 3. Run `liveness_app.py` or `liveness_app_v2.py` or `liveness_app_android.py` or `liveness_app_from_picture.py`
-4. That's it!  
-  
-**Note: Doing only these steps will allow only Liveness detection to work but not Recognition and Full login mechanism (for full workflow and training our own model, please keep reading and follow the next section)**
+4. That's it!   
 
 ## Full Workflow usage and Training your own model
-**We'll start with face recognition (step 1-5) and we'll do face liveness detection next (step 6-13). Finally, we'll combine everything together (step 14 til the end)**
-1. Create 1 folder for 1 person and name after the person's name in *face_recognition/dataset* (you can take a look at this folder in this repo for example)
-2. Collect the images showing full face (1 face per 1 image per 1 person). Since we are using **1 shot learning** technique, collect only up to 10 images for each person would be enough.
-3. Run `encode_faces.py` like the example above in files explanation section
-4. Now you should get encoded faces file ending with .pickle in the path you specify (if you follow the code above, you should see it in the same folder with this file)
-5. Run `recognize_faces.py` like the example above in files explanation section and see whether it works well.
-6. Collect video of yourself/others in many light condition (the easiest way to do this is to film yourself/others walking around your/others home) and save to *face_liveness_dection/videos* folder. *The length of the video depends on you.* You don't need to name it with the word 'real' or 'fake'. It's just convention that we found helpful when calling from other codes. **Take a look into that folder, we have dropped some example videos there.**
-7. Use those recorded videos and play it on your phone. Then, hold your phone and face the phone screen (running those recorded videos) to the webcam and record your PC/laptop screen. By doing this, you are creating the dataset of someone spoofing the person in the video / pretending to be the person in the video. Try to make sure this new spoofing video has the same length (or nearly) as the original one because we need to avoid *unbalanced dataset*. **Take a look into that folder, we have dropped some example videos there.**
-8. Run **`collect_dataset.py`** like the example above in files explanation section for every of your video. Make sure you save the output into the right folder (should be in `dataset` folder and in the right label folder `fake` or `real`). Now you must see a lot of images from your video in the output folder.
-9. (Optional, but good to do in order to improve model performance) Take a picture of yourself/others from a paper, photo, cards, etc. and save to *face_liveness_detection/images/fakes*. **Take a look into that folder, we have dropped some example videos there.**
-10. If you do step 9, please do this step. Otherwise, you can skip this step. Take more pictures of your face / others' face **in the same amount of the fake images you taken in step 8** and save to *face_liveness_detection/images/reals*. Again, by doing this, we can avoid *unbalanced dataset*. **Take a look into that folder, we have dropped some example videos there.**
-11. (Skip this step if you didn't do step 9) Run **`face_from_image.py`** like the example above in files explanation section for every of your image in images folder. Make sure you save the output into the right folder (should be in `dataset` folder and in the right label folder `fake` or `real`). *Note: Like we discussed in files explanation section, you have to run this code 1 image at a time. If you have a lot of images, feel free to adjust the code. So you can run only once for every of your image. (But make sure to save outputs to the right folder)*
-12. Run **`train_model.py`** like the example above in files explanation section. Now, we should have .model or .h5, label encoder file ending with .pickle, and image in the output folder you specify. If you follow exact code above in files explanation, you should see liveness.model or liveness.h5, label_encoder.pickle, and plot.png in this exact folder (like in this repo).
-13. Run **`liveness_app.py`** like the example above in files explanation section and see whether it works well. If the model always misclassify, go back and see whether you save output images (real/fake) in the right folder. If you are sure that you save everything in the right place, collect more data or better quality data. *This is the common iterative process of training model, don't feel bad if you have this problem.*
-
-## Hope you find our project exciting and useful more or less :D
+1. Collect video of yourself/others in many light condition (the easiest way to do this is to film yourself/others walking around your/others home) and save to *face_liveness_dection/videos* folder. *The length of the video depends on you.* You don't need to name it with the word 'real' or 'fake'. It's just convention that we found helpful when calling from other codes. **Take a look into that folder, we have dropped some example videos there.**
+2. Use those recorded videos and play it on your phone. Then, hold your phone and face the phone screen (running those recorded videos) to the webcam and record your PC/laptop screen. By doing this, you are creating the dataset of someone spoofing the person in the video / pretending to be the person in the video. Try to make sure this new spoofing video has the same length (or nearly) as the original one because we need to avoid *unbalanced dataset*. **Take a look into that folder, we have dropped some example videos there.**
+3. Run **`collect_dataset.py`** like the example above in files explanation section for every of your video. Make sure you save the output into the right folder (should be in `dataset` folder and in the right label folder `fake` or `real`). Now you must see a lot of images from your video in the output folder.
+4. (Optional, but good to do in order to improve model performance) Take a picture of yourself/others from a paper, photo, cards, etc. and save to *face_liveness_detection/images/fakes*. **Take a look into that folder, we have dropped some example videos there.**
+5. If you do step 9, please do this step. Otherwise, you can skip this step. Take more pictures of your face / others' face **in the same amount of the fake images you taken in step 8** and save to *face_liveness_detection/images/reals*. Again, by doing this, we can avoid *unbalanced dataset*. **Take a look into that folder, we have dropped some example videos there.**
+6. (Skip this step if you didn't do step 9) Run **`face_from_image.py`** like the example above in files explanation section for every of your image in images folder. Make sure you save the output into the right folder (should be in `dataset` folder and in the right label folder `fake` or `real`). *Note: Like we discussed in files explanation section, you have to run this code 1 image at a time. If you have a lot of images, feel free to adjust the code. So you can run only once for every of your image. (But make sure to save outputs to the right folder)*
+7. Run **`train_model.py`** like the example above in files explanation section. Now, we should have .model or .h5, label encoder file ending with .pickle, and image in the output folder you specify. If you follow exact code above in files explanation, you should see liveness.model or liveness.h5, label_encoder.pickle, and plot.png in this exact folder (like in this repo).
+8. Run **`liveness_app.py`** like the example above in files explanation section and see whether it works well. If the model always misclassify, go back and see whether you save output images (real/fake) in the right folder. If you are sure that you save everything in the right place, collect more data or better quality data. *This is the common iterative process of training model, don't feel bad if you have this problem.*
 
 ## What can be improved
 - Collect more data in many light conditions and from different genders/ethnics to improve the model (it turned out light intensity and condition play a big role here)
 
-## Problems we've found
-TBA
-
-## Amazing resources I have learned from
+## Resources
 - https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
 - https://www.pyimagesearch.com/2019/03/11/liveness-detection-with-opencv/
 - https://www.youtube.com/watch?v=2Zz97NVbH0U&t=790s
 ### Source
 - https://github.com/jomariya23156/face-recognition-with-liveness-web-login
-  
-**image in the log in page:** https://www.welivesecurity.com/wp-content/uploads/2019/12/face-scanning-1-e1575541339743.jpg?h=660&la=en&w=1170
