@@ -7,9 +7,7 @@ import argparse
 import imutils
 from imutils import paths
 import pickle
-import time
 import cv2
-from datetime import datetime
 
 # construct the argument parser and parse the arguments
 parser = argparse.ArgumentParser()

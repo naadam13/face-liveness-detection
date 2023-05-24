@@ -10,29 +10,33 @@ import os
 
 # construct the argument parser and parse the arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('-m', '--model', type=str, required=True,
-                    help='Path to trained model')
-parser.add_argument('-l', '--le', type=str, required=True,
-                    help='Path to Label Encoder')
-parser.add_argument('-d', '--detector', type=str, required=True,
-                    help='Path to OpenCV\'s deep learning face detector')
+# parser.add_argument('-m', '--model', type=str, required=True,
+#                     help='Path to trained model')
+# parser.add_argument('-l', '--le', type=str, required=True,
+#                     help='Path to Label Encoder')
+# parser.add_argument('-d', '--detector', type=str, required=True,
+#                     help='Path to OpenCV\'s deep learning face detector')
 parser.add_argument('-c', '--confidence', type=float, default=0.5,
                     help='minimum probability to filter out weak detections')
 args = vars(parser.parse_args())
 
 # load our serialized face detector from disk
 print('[INFO] loading face detector...')
-proto_path = os.path.sep.join([args['detector'], 'deploy.prototxt'])
-model_path = os.path.sep.join([args['detector'], 'res10_300x300_ssd_iter_140000.caffemodel'])
+# proto_path = os.path.sep.join([args['detector'], 'deploy.prototxt'])
+# model_path = os.path.sep.join([args['detector'], 'res10_300x300_ssd_iter_140000.caffemodel'])
+proto_path = os.path.sep.join(['face_detector','deploy.prototxt'])
+model_path = os.path.sep.join(['face_detector',
+                            'res10_300x300_ssd_iter_140000.caffemodel'])
 detector_net = cv2.dnn.readNetFromCaffe(proto_path, model_path)
 
 # load the liveness detector model and label encoder from disk
-liveness_model = tf.keras.models.load_model(args['model'])
-le = pickle.loads(open(args['le'], 'rb').read())
+# liveness_model = tf.keras.models.load_model(args['model'])
+# le = pickle.loads(open(args['le'], 'rb').read())
+liveness_model = tf.keras.models.load_model('liveness.h5')
+le = pickle.loads(open('label_encoder.pickle', 'rb').read())
 
 # initialize the video stream and allow camera to warmup
 print('[INFO] starting video stream...')
-rtsp_url = "rtsp://192.168.88.104:8080/video"
 vs = VideoStream(src=0).start()
 time.sleep(2) # wait camera to warmup
 
