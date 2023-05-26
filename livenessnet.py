@@ -25,19 +25,19 @@ class LivenessNet:
                 tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), padding='same', activation='relu'),
                 tf.keras.layers.BatchNormalization(axis=chanDim),
                 tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
-                tf.keras.layers.Dropout(0.125),
+                tf.keras.layers.Dropout(0.25),
                 
                 # second set CONV => BatchNorm CONV => BatchNorm => MaxPool => Dropout
-                tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), padding='same', activation='relu'),
+                tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), padding='same', activation='relu'),
                 tf.keras.layers.BatchNormalization(axis=chanDim),
                 tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), padding='same', activation='relu'),
                 tf.keras.layers.BatchNormalization(axis=chanDim),
                 tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
-                tf.keras.layers.Dropout(0.5),
+                tf.keras.layers.Dropout(0.25),
 
                 # FullyConnected => BatchNorm => Dropout
                 tf.keras.layers.Flatten(),
-                tf.keras.layers.Dense(600, activation='relu'),
+                tf.keras.layers.Dense(320, activation='relu'),
                 tf.keras.layers.BatchNormalization(),
                 tf.keras.layers.Dropout(0.5),
                 

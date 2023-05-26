@@ -88,7 +88,7 @@ aug = tf.keras.preprocessing.image.ImageDataGenerator(rotation_range=20,
 # define hyperparameters
 INIT_LR = 0.00001 # initial learning rate
 BATCH_SIZE = 16
-EPOCHS = 1500
+EPOCHS = 2500
 
 # we don't need early stopping here because we have a small dataset, there is no need to do so
 # initialize the optimizer and model
